@@ -1,17 +1,21 @@
 import asyncio
+import os
 from subprocess import run
 
 from pyrogram import filters
 from pyrogram.types import Message
 
-from ongaku.core.client import git_branch, trigger, users
-from ongaku.song import get_song, current_
-from ongaku import venom as ong
+from ongaku.loop import get_song
+from ongaku.config import Config
+from ongaku import ongaku as ong
 
 from .neofetch import neofetch
 
 Repos = "https://github.com/Ongaku-TG/ongaku"
 
+trigger=Config.trigger
+
+users=Config.users
 
 @ong.on_message(
     filters.command(commands="about", prefixes=trigger) & filters.user(users), group=4
@@ -43,7 +47,7 @@ def history_(ong, message: Message):
     message.delete()
     history = ""
     count = 0
-    for i in current_[1:]:
+    for i in Config.current_[1:]:
         count += 1
         history += f"\n**{count}.** `{i}`"
     if not history:
@@ -68,7 +72,7 @@ def neo_alive(ong, message: Message):
         return out_msg.edit("Ongaku: Neofetch is not installed\nTip: Check README.md")
     if "-t" in rw_msg:
         return out_msg.edit(f"`{neo}`")
-    caption = f"User : {(ong.get_me().mention)}\nGit-Branch : {git_branch}"
+    caption = f"User : {(ong.get_me().mention)}\nGit-Branch : {Config.git_branch}"
     repo = run(
         "git config --get remote.origin.url", shell=True, capture_output=True
     ).stdout.decode("utf-8")
@@ -83,6 +87,9 @@ def neo_alive(ong, message: Message):
     return out_msg.delete()
 
 
-# @ong.on_message(filters.command(commands="restart", prefixes=trigger) & filters.user(users), group=2)
-# async def restart(ong, message: Message):
-# to do
+@ong.on_message(filters.command(commands="restart", prefixes=trigger) & filters.user(users), group=2)
+async def restart(ong, message: Message):
+    import sys
+    ong.stop()
+    os.execl(sys.executable, sys.executable, "-m", "ongaku")
+    sys.exit()

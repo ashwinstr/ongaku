@@ -1,6 +1,3 @@
-# init.py
+from ongaku.client import Ongaku
 
-from .core.client import Ongaku
-from .config import Config
-
-venom = Ongaku()
+ongaku=Ongaku()
