@@ -1,4 +1,5 @@
 config*.env
 TG_SESSION.session
+kakashi's test.session
 venv/
 __pycache__

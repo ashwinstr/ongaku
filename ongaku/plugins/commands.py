@@ -1,13 +1,12 @@
 import asyncio
-import os
 from subprocess import run
 
 from pyrogram import filters
 from pyrogram.types import Message
 
-from ongaku.ongaku import current_, get_song, git_branch, trigger
-from ongaku.ongaku import ongaku as ong
-from ongaku.ongaku import users
+from ongaku.core.client import git_branch, trigger, users
+from ongaku.song import get_song, current_
+from ongaku import venom as ong
 
 from .neofetch import neofetch
 
